@@ -34,7 +34,10 @@ cd wrt_release
 
 ./build.sh redmi_ax5_immwrt
 
+./build.sh redmi_ax5_libwrt
+
 编译红米AX6:
+
 ./build.sh redmi_ax6_immwrt
 
 编译红米AX6000:
