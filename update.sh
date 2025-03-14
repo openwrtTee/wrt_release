@@ -140,7 +140,8 @@ install_small8() {
         adguardhome luci-app-adguardhome ddns-go luci-app-ddns-go taskd luci-lib-xterm luci-lib-taskd \
         luci-app-store quickstart luci-app-quickstart luci-app-istorex luci-app-cloudflarespeedtest \
         luci-theme-argon netdata luci-app-netdata lucky luci-app-lucky luci-app-openclash luci-app-homeproxy \
-        luci-app-amlogic nikki luci-app-nikki tailscale luci-app-tailscale oaf open-app-filter luci-app-oaf
+        luci-app-amlogic nikki luci-app-nikki tailscale luci-app-tailscale oaf open-app-filter luci-app-oaf \
+        easytier luci-app-easytier
 }
 
 install_feeds() {
@@ -508,22 +509,35 @@ update_dnsmasq_conf() {
 
 # 更新版本
 update_package() {
-    local dir="$BUILD_DIR/feeds/$1"
+    local dir=$(find "$BUILD_DIR/package" \( -type d -o -type l \) -name $1)
+    if [ -z $dir ]; then
+        return 0
+    fi
     local mk_path="$dir/Makefile"
-    if [ -d "${mk_path%/*}" ] && [ -f "$mk_path" ]; then
+    if [ -f "$mk_path" ]; then
         # 提取repo
-        local PKG_REPO=$(grep -oE "^PKG_SOURCE_URL.*tar\.gz" $mk_path | awk -F"/" '{print $(NF - 2) "/" $(NF -1 )}')
+        local PKG_REPO=$(grep -oE "^PKG_SOURCE_URL.*github.com(/[-_a-zA-Z0-9]{1,}){2}" $mk_path | awk -F"/" '{print $(NF - 1) "/" $NF}')
         if [ -z $PKG_REPO ]; then
-            return 1
+            return 0
         fi
         local PKG_VER=$(curl -sL "https://api.github.com/repos/$PKG_REPO/releases" | jq -r "map(select(.prerelease|not)) | first | .tag_name")
-        local PKG_HASH=$(curl -sL "https://codeload.github.com/$PKG_REPO/tar.gz/$PKG_VER" | sha256sum | cut -b -64)
+        PKG_VER=$(echo $PKG_VER | grep -oE "[\.0-9]{1,}")
 
-        # 删除PKG_VER开头的v
-        PKG_VER=${PKG_VER#v}
+        local PKG_NAME=$(awk -F"=" '/PKG_NAME:=/ {print $NF}' $mk_path | grep -oE "[-_:/\$\(\)\?\.a-zA-Z0-9]{1,}")
+        local PKG_SOURCE=$(awk -F"=" '/PKG_SOURCE:=/ {print $NF}' $mk_path | grep -oE "[-_:/\$\(\)\?\.a-zA-Z0-9]{1,}")
+        local PKG_SOURCE_URL=$(awk -F"=" '/PKG_SOURCE_URL:=/ {print $NF}' $mk_path | grep -oE "[-_:/\$\(\)\?\.a-zA-Z0-9]{1,}")
+
+        PKG_SOURCE_URL=${PKG_SOURCE_URL//\$\(PKG_NAME\)/$PKG_NAME}
+        PKG_SOURCE_URL=${PKG_SOURCE_URL//\$\(PKG_VERSION\)/$PKG_VER}
+        PKG_SOURCE=${PKG_SOURCE//\$\(PKG_NAME\)/$PKG_NAME}
+        PKG_SOURCE=${PKG_SOURCE//\$\(PKG_VERSION\)/$PKG_VER}
+
+        local PKG_HASH=$(curl -sL "$PKG_SOURCE_URL""$PKG_SOURCE" | sha256sum | cut -b -64)
 
         sed -i 's/^PKG_VERSION:=.*/PKG_VERSION:='$PKG_VER'/g' $mk_path
         sed -i 's/^PKG_HASH:=.*/PKG_HASH:='$PKG_HASH'/g' $mk_path
+
+        echo "Update Package $1 to $PKG_VER $PKG_HASH"
     fi
 }
 
@@ -542,6 +556,7 @@ function add_backup_info_to_sysupgrade() {
     if [ -f "$conf_path" ]; then
         cat >"$conf_path" <<'EOF'
 /etc/AdGuardHome.yaml
+/etc/easytier
 /etc/lucky/
 EOF
     fi
@@ -596,6 +611,7 @@ update_mosdns_deconfig() {
     local mosdns_conf="$BUILD_DIR/feeds/small8/luci-app-mosdns/root/etc/config/mosdns"
     if [ -d "${mosdns_conf%/*}" ] && [ -f "$mosdns_conf" ]; then
         sed -i 's/8000/300/g' "$mosdns_conf"
+        sed -i 's/5335/5336/g' "$mosdns_conf"
     fi
 }
 
@@ -612,6 +628,7 @@ fix_quickstart() {
 update_oaf_deconfig() {
     local conf_path="$BUILD_DIR/feeds/small8/open-app-filter/files/appfilter.config"
     local uci_def="$BUILD_DIR/feeds/small8/luci-app-oaf/root/etc/uci-defaults/94_feature_3.0"
+    local disable_path="$BUILD_DIR/feeds/small8/luci-app-oaf/root/etc/uci-defaults/99_disable_oaf"
 
     if [ -d "${conf_path%/*}" ] && [ -f "$conf_path" ]; then
         sed -i \
@@ -623,6 +640,16 @@ update_oaf_deconfig() {
 
     if [ -d "${uci_def%/*}" ] && [ -f "$uci_def" ]; then
         sed -i '/\(disable_hnat\|auto_load_engine\)/d' "$uci_def"
+
+        # 禁用脚本
+        cat >"$disable_path" <<-EOF
+#!/bin/sh
+[ "\$(uci get appfilter.global.enable 2>/dev/null)" = "0" ] && {
+    /etc/init.d/appfilter disable
+    /etc/init.d/appfilter stop
+}
+EOF
+        chmod +x "$disable_path"
     fi
 }
 
@@ -667,7 +694,6 @@ main() {
     fix_quickstart
     update_oaf_deconfig
     install_feeds
-    update_package "small8/sing-box"
     update_script_priority
 }
 
