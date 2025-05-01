@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
 
-set -e
-set -o errexit
-set -o errtrace
+set -eo pipefail
+trap 'error_handler' ERR
 
 # 定义错误处理函数
 error_handler() {
-    echo "Error occurred in script at line: ${BASH_LINENO[0]}, command: '${BASH_COMMAND}'"
+    local exit_code=$?
+    local line_number=${BASH_LINENO[0]}
+    local command="${BASH_COMMAND}"
+    echo "Error: Command '$command' failed at line $line_number with exit code $exit_code"
+    exit $exit_code
 }
-
-# 设置trap捕获ERR信号
-trap 'error_handler' ERR
 
 source /etc/profile
 BASE_PATH=$(cd $(dirname $0) && pwd)
@@ -20,11 +20,11 @@ REPO_BRANCH=$2
 BUILD_DIR=$3
 COMMIT_HASH=$4
 
-FEEDS_CONF="feeds.conf.default"
-GOLANG_REPO="https://github.com/sbwml/packages_lang_golang"
-GOLANG_BRANCH="24.x"
-THEME_SET="argon"
-LAN_ADDR="192.168.1.1"
+readonly FEEDS_CONF="feeds.conf.default"
+readonly GOLANG_REPO="https://github.com/sbwml/packages_lang_golang"
+readonly GOLANG_BRANCH="24.x"
+readonly THEME_SET="argon"
+readonly LAN_ADDR="192.168.1.1"
 
 clone_repo() {
     if [[ ! -d $BUILD_DIR ]]; then
@@ -82,6 +82,7 @@ update_feeds() {
     # 更新 feeds
     ./scripts/feeds clean
     ./scripts/feeds update -a
+    ./scripts/feeds install -a
 }
 
 remove_unwanted_packages() {
@@ -132,9 +133,14 @@ remove_unwanted_packages() {
 }
 
 update_golang() {
-    if [[ -d ./feeds/packages/lang/golang ]]; then
-        \rm -rf ./feeds/packages/lang/golang
-        git clone --depth 1 $GOLANG_REPO -b $GOLANG_BRANCH ./feeds/packages/lang/golang
+    local golang_dir="./feeds/packages/lang/golang"
+    if [[ -d "$golang_dir" ]]; then
+        echo "Updating Golang to $GOLANG_BRANCH"
+        rm -rf "$golang_dir"
+        git clone --depth 1 "$GOLANG_REPO" -b "$GOLANG_BRANCH" "$golang_dir" || {
+            echo "Error: Failed to update Golang"
+            exit 1
+        }
     fi
 }
 
