@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 set -eo pipefail
-trap 'error_handler' ERR
 
 # 定义错误处理函数
 error_handler() {
@@ -11,6 +10,9 @@ error_handler() {
     echo "Error: Command '$command' failed at line $line_number with exit code $exit_code"
     exit $exit_code
 }
+
+# 设置trap捕获ERR信号
+trap 'error_handler' ERR
 
 source /etc/profile
 BASE_PATH=$(cd $(dirname $0) && pwd)
