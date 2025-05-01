@@ -82,7 +82,6 @@ update_feeds() {
     # 更新 feeds
     ./scripts/feeds clean
     ./scripts/feeds update -a
-    ./scripts/feeds install -a
 }
 
 remove_unwanted_packages() {
