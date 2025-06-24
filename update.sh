@@ -230,7 +230,7 @@ install_fullconenat() {
 fix_mk_def_depends() {
     sed -i 's/libustream-mbedtls/libustream-openssl/g' $BUILD_DIR/include/target.mk 2>/dev/null
     if [ -f $BUILD_DIR/target/linux/qualcommax/Makefile ]; then
-        sed -i 's/wpad-basic-mbedtls/wpad-openssl/g' $BUILD_DIR/target/linux/qualcommax/Makefile
+        sed -i 's/wpad-openssl/wpad-mesh-openssl/g' $BUILD_DIR/target/linux/qualcommax/Makefile
     fi
 }
 
@@ -797,6 +797,30 @@ update_smartdns_luci() {
     fi
 }
 
+update_diskman() {
+    local path="$BUILD_DIR/feeds/luci/applications/luci-app-diskman"
+    if [ -d "$path" ]; then
+        cd "$BUILD_DIR/feeds/luci/applications" || return # 显式路径避免歧义
+        \rm -rf "luci-app-diskman"                        # 直接删除目标目录
+
+        git clone --filter=blob:none --no-checkout https://github.com/lisaac/luci-app-diskman.git diskman || return
+        cd diskman || return
+
+        git sparse-checkout init --cone
+        git sparse-checkout set applications/luci-app-diskman || return # 错误处理
+
+        git checkout --quiet # 静默检出避免冗余输出
+
+        mv applications/luci-app-diskman ../luci-app-diskman || return # 添加错误检查
+        cd .. || return
+        \rm -rf diskman
+        cd "$BUILD_DIR"
+
+        sed -i 's/fs-ntfs /fs-ntfs3 /g' "$path/Makefile"
+        sed -i '/ntfs-3g-utils /d' "$path/Makefile"
+    fi
+}
+
 main() {
     clone_repo
     clean_up
@@ -839,6 +863,7 @@ main() {
     update_lucky
     fix_rust_compile_error
     update_smartdns_luci
+    update_diskman
     install_feeds
     support_fw4_adg
     update_script_priority
