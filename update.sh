@@ -636,7 +636,7 @@ update_mosdns_deconfig() {
 fix_quickstart() {
     local file_path="$BUILD_DIR/feeds/small8/luci-app-quickstart/luasrc/controller/istore_backend.lua"
     # 下载新的istore_backend.lua文件并覆盖
-    if [ -f "$file_path" ]; thenAdd commentMore actions
+    if [ -f "$file_path" ]; then
         \rm -f "$file_path"
         curl -L https://gist.githubusercontent.com/puteulanus/1c180fae6bccd25e57eb6d30b7aa28aa/raw/istore_backend.lua \
             -o "$file_path"
