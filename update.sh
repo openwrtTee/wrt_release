@@ -869,8 +869,8 @@ main() {
     update_script_priority
     fix_easytier
     update_geoip
-    update_package "runc" "releases" "v1.3.0"
-    update_package "containerd" "releases" "v2.1.3"
+    update_package "runc" "releases" "v1.2.6"
+    update_package "containerd" "releases" "v1.7.27"
     update_package "docker" "tags" "v28.3.1"
     update_package "dockerd" "releases" "v28.3.1"
     # update_package "xray-core"
