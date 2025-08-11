@@ -964,8 +964,8 @@ main() {
     update_geoip
     update_package "runc" "releases" "v1.2.6"
     update_package "containerd" "releases" "v1.7.27"
-    update_package "docker" "tags" "v28.2.2"
-    update_package "dockerd" "releases" "v28.2.2"
+    update_package "docker" "tags" "v28.3.2"
+    update_package "dockerd" "releases" "v28.3.2"
     apply_hash_fixes # 调用哈希修正函数
 }
 
