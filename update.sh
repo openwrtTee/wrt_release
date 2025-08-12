@@ -602,7 +602,6 @@ function add_backup_info_to_sysupgrade() {
     if [ -f "$conf_path" ]; then
         cat >"$conf_path" <<'EOF'
 /etc/AdGuardHome.yaml
-/etc/easytier
 /etc/lucky/
 EOF
     fi
@@ -927,7 +926,7 @@ main() {
     fix_mk_def_depends
     add_wifi_default_set
     update_default_lan_addr
-    remove_something_nss_kmod
+    # remove_something_nss_kmod
     update_affinity_script
     update_ath11k_fw
     # fix_mkpkg_format_invalid
