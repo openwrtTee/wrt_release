@@ -982,7 +982,7 @@ main() {
     fix_mk_def_depends
     add_wifi_default_set
     update_default_lan_addr
-    remove_something_nss_kmod
+    # remove_something_nss_kmod
     update_affinity_script
     update_ath11k_fw
     # fix_mkpkg_format_invalid
@@ -1019,8 +1019,8 @@ main() {
     update_geoip
     update_package "runc" "releases" "v1.2.6"
     update_package "containerd" "releases" "v1.7.27"
-    update_package "docker" "tags" "v28.2.2"
-    update_package "dockerd" "releases" "v28.2.2"
+    update_package "docker" "tags" "v28.3.3"
+    update_package "dockerd" "releases" "v28.3.3"
     apply_hash_fixes # 调用哈希修正函数
 }
 
