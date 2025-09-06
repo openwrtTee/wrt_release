@@ -979,7 +979,7 @@ main() {
     fix_miniupnpd
     update_golang
     change_dnsmasq2full
-    fix_mk_def_depends
+    # fix_mk_def_depends
     add_wifi_default_set
     update_default_lan_addr
     # remove_something_nss_kmod
