@@ -94,8 +94,8 @@ main() {
     install_pbr_cmcc
     update_package "runc" "releases" "v1.3.4"
     update_package "containerd" "releases" "v1.7.30"
-    update_package "docker" "tags" "v29.2.1"
-    update_package "dockerd" "releases" "v29.2.1"
+    update_package "docker" "tags" "v28.5.2"
+    update_package "dockerd" "releases" "v28.5.2"
     # apply_hash_fixes
 }
 
