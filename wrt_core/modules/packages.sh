@@ -139,7 +139,7 @@ add_ax6600_led() {
 }
 
 update_homeproxy() {
-    local repo_url="https://github.com/immortalwrt/homeproxy.git"
+    local repo_url="https://github.com/VIKINGYFY/homeproxy.git"
     local target_dir="$BUILD_DIR/feeds/small8/luci-app-homeproxy"
 
     if [ -d "$target_dir" ]; then
