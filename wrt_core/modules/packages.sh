@@ -150,7 +150,7 @@ update_homeproxy() {
             exit 1
         fi
         
-    if [ -d *"homeproxy"* ]; then
+    if [ -d "$target_dir" ]; the
 	echo " "
 
 	HP_RULE="surge"
@@ -343,7 +343,7 @@ add_quickfile() {
 }
 
 update_argon() {
-    local repo_url="https://github.com/jerrykuku/luci-theme-argon.git"
+    local repo_url="https://github.com/sbwml/luci-theme-argon.git"
     local dst_theme_path="$BUILD_DIR/feeds/luci/themes/luci-theme-argon"
     local tmp_dir
     tmp_dir=$(mktemp -d)
