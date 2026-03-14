@@ -149,8 +149,8 @@ update_homeproxy() {
             echo "错误：从 $repo_url 克隆 homeproxy 仓库失败" >&2
             exit 1
         fi
-        
-    if [ -d "$target_dir" ]; the
+      fi
+    if [ -d "$target_dir" ]; then
 	echo " "
 
 	HP_RULE="surge"
@@ -169,7 +169,6 @@ update_homeproxy() {
 	cd .. && rm -rf ./$HP_RULE/
 
 	cd $PKG_PATH && echo "homeproxy date has been updated!"
-       fi
     fi
 }
 
