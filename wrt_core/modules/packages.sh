@@ -301,7 +301,7 @@ add_ax6600_led() {
 }
 
 update_homeproxy() {
-    local repo_url="https://github.com/immortalwrt/homeproxy.git"
+    local repo_url="https://github.com/VIKINGYFY/homeproxy.git"
     local target_dir="$(get_custom_feed_worktree_dir)/luci-app-homeproxy"
 
     if [ -d "$target_dir" ]; then
@@ -547,7 +547,7 @@ add_quickfile() {
 }
 
 update_argon() {
-    local repo_url="https://github.com/ZqinKing/luci-theme-argon.git"
+    local repo_url="https://github.com/sbwml/luci-theme-argon.git"
     local dst_theme_path="$BUILD_DIR/feeds/luci/themes/luci-theme-argon"
     local tmp_dir
     tmp_dir=$(mktemp -d)
