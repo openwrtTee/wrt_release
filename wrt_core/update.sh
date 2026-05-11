@@ -50,10 +50,10 @@ main() {
     fix_miniupnpd
     update_golang
     change_dnsmasq2full
-    fix_mk_def_depends
+    # fix_mk_def_depends
 
     update_default_lan_addr
-    remove_something_nss_kmod
+    # remove_something_nss_kmod
     update_affinity_script
     update_ath11k_fw
     # fix_mkpkg_format_invalid
