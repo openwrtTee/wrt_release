@@ -51,7 +51,7 @@ remove_unwanted_packages() {
 
 
 update_homeproxy() {
-    local repo_url="https://github.com/VIKINGYFY/packages/luci-app-homeproxy.git"
+    local repo_url="https://github.com/VIKINGYFY/packages/tree/main/luci-app-homeproxy.git"
     local target_dir="$(get_custom_feed_worktree_dir)/luci-app-homeproxy"
 
     if [ -d "$target_dir" ]; then
