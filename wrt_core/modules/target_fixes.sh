@@ -39,7 +39,7 @@ change_dnsmasq2full() {
 fix_mk_def_depends() {
     sed -i 's/libustream-mbedtls/libustream-openssl/g' $BUILD_DIR/include/target.mk 2>/dev/null
     if [ -f $BUILD_DIR/target/linux/qualcommax/Makefile ]; then
-        sed -i 's/wpad-openssl/wpad-mesh-openssl/g' $BUILD_DIR/target/linux/qualcommax/Makefile
+        sed -i 's/wpad-mesh-openssl/wpad-openssl/g' $BUILD_DIR/target/linux/qualcommax/Makefile
     fi
 }
 
