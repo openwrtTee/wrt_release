@@ -5,7 +5,7 @@ set -o errexit
 set -o errtrace
 
 error_handler() {
-    echo "Error occurred in script at line: ${BASH_LINENO[0]}, command: '${BASH_COMMAND}'"echo "脚本在第: ${BASH_LINENO[0]} 行发生错误，命令为：'${BASH_COMMAND}'"
+    echo "Error occurred in script at line: ${BASH_LINENO[0]}, command: '${BASH_COMMAND}'"
 }
 
 trap 'error_handler' ERR
@@ -130,6 +130,7 @@ stage_post_install_package_fixes() {
     update_adguardhome
     update_script_priority
     update_geoip
+    update_HomeProxy
     fix_openssl_ktls
     fix_opkg_check
     fix_netfilter_kmod_clash
