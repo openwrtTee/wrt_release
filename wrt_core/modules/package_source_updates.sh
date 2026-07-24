@@ -152,7 +152,6 @@ update_diskman() {
 _sync_luci_lib_docker() {
     local lib_path="$BUILD_DIR/feeds/luci/libs/luci-lib-docker"
     local repo_url="https://github.com/lisaac/luci-lib-docker.git"
-    sed -i "s/PKG_VERSION:=v0.3.4/PKG_VERSION:=0.3.4/" "$BUILD_DIR/feeds/luci/libs/luci-lib-docker/Makefile"
     
     if [ ! -d "$lib_path" ]; then
         echo "正在同步 luci-lib-docker..."
@@ -173,11 +172,17 @@ _sync_luci_lib_docker() {
         mv collections/luci-lib-docker ../luci-lib-docker || return
         cd .. || return
         \rm -rf luci-lib-docker-tmp
+        
+        if [ -f "$lib_path/Makefile" ]; then
+        sed -i "s/PKG_VERSION:=v0.3.4/PKG_VERSION:=0.3.4/" "$lib_path/Makefile"
+        echo "版本号已修正"
+        else
+        echo "警告：Makefile 不存在，跳过版本号修正" >&2
+        fi
         cd "$BUILD_DIR"
         echo "luci-lib-docker 同步完成"
     fi
 }
-
 
 update_dockerman() {
     local path="$BUILD_DIR/feeds/luci/applications/luci-app-dockerman"
