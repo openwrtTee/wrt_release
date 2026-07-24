@@ -130,7 +130,6 @@ stage_post_install_package_fixes() {
     update_adguardhome
     update_script_priority
     update_geoip
-    update_HomeProxy
     fix_openssl_ktls
     fix_opkg_check
     fix_netfilter_kmod_clash
