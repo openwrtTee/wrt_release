@@ -105,6 +105,7 @@ stage_pre_install_source_fixes() {
     update_mwan3_fw4
     update_diskman
     update_dockerman
+    update_HomeProxy
     set_nginx_default_config
     update_uwsgi_limit_as
     update_argon
