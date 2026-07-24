@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 if [ -n "${GITHUB_WORKSPACE:-}" ] && [ -d "$GITHUB_WORKSPACE/wrt/package" ]; then
 	PKG_PATH="$GITHUB_WORKSPACE/wrt/package"
