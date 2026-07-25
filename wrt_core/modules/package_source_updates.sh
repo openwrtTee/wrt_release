@@ -209,6 +209,13 @@ update_dockerman() {
         mv applications/luci-app-dockerman ../luci-app-dockerman || return
         cd .. || return
         \rm -rf dockerman
+
+        if [ -f "$lib_path/Makefile" ]; then
+        sed -i "s/PKG_VERSION:=0.5.26/PKG_VERSION:=0.5.26/" "$lib_path/Makefile"
+        echo "版本号已修正"
+        else
+        echo "警告：Makefile 不存在，跳过版本号修正" >&2
+        fi
         cd "$BUILD_DIR"
 
         if declare -F docker_stack_sync_dockerman_nftables_compat >/dev/null 2>&1; then
