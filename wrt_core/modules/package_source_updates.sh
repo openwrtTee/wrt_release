@@ -210,7 +210,7 @@ update_dockerman() {
         cd .. || return
         \rm -rf dockerman
 
-        if [ -f "$lib_path/Makefile" ]; then
+        if [ -f "$path/Makefile" ]; then
         sed -i "s/PKG_VERSION:=v0.5.26/PKG_VERSION:=0.5.26/" "$lib_path/Makefile"
         echo "版本号已修正"
         else
