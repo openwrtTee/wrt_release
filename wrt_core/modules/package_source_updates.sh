@@ -211,7 +211,7 @@ update_dockerman() {
         \rm -rf dockerman
 
         if [ -f "$path/Makefile" ]; then
-        sed -i "s/PKG_VERSION:=v0.5.26/PKG_VERSION:=0.5.26/" "$lib_path/Makefile"
+        sed -i "s/PKG_VERSION:=v0.5.26/PKG_VERSION:=0.5.26/" "$path/Makefile"
         echo "版本号已修正"
         else
         echo "警告：Makefile 不存在，跳过版本号修正" >&2
