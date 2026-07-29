@@ -82,9 +82,6 @@ remove_something_nss_kmod() {
         sed -i '/kmod-qca-nss-drv-vxlanmgr/d' "$ipq_mk_path"
         sed -i '/kmod-qca-nss-drv-wifi-meshmgr/d' "$ipq_mk_path"
         sed -i '/kmod-qca-nss-macsec/d' "$ipq_mk_path"
-
-        sed -i 's/automount //g' "$ipq_mk_path"
-        sed -i 's/cpufreq //g' "$ipq_mk_path"
     fi
 }
 
