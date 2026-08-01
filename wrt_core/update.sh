@@ -78,7 +78,7 @@ stage_pre_install_source_fixes() {
     # fix_mk_def_depends
 
     update_default_lan_addr
-    remove_something_nss_kmod
+    # remove_something_nss_kmod
     update_affinity_script
     update_ath11k_fw
     # fix_mkpkg_format_invalid
