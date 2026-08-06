@@ -1,19 +1,11 @@
 #!/bin/sh
 # Copyright (C) 2024 YumesomeZakura <1552037053@qq.com>
 
-cpu_usage=$(top -bn1 | head -n2 | awk -F'[ %]+' 'NR==2{print $2}')
-combined_output=""
+read -r usr sys < <(top -bn1 | awk 'NR==2 {print $2, $4}')
+cpu_load="USR: ${usr} SYS: ${sys}"
 
-if [ -e "/sys/kernel/debug/qca-nss-drv/stats/cpu_load_ubi" ]; then
-    nss_avg_utilization=$(awk 'NR==6 {print $2}' /sys/kernel/debug/qca-nss-drv/stats/cpu_load_ubi)
-    combined_output="${combined_output}${nss_avg_utilization}"
-fi
+nss_load="$(awk 'NR == 6 { print $2; exit }' /sys/kernel/debug/qca-nss-drv/stats/cpu_load_ubi 2>/dev/null)"
+nss_freq="$(awk 'NF { printf "%.1fMHz", $1 / 1000000; exit }' /proc/sys/dev/nss/clock/current_freq 2>/dev/null)"
+nss_ecm="$(cat /sys/kernel/debug/ecm/ecm_db/connection_count_simple 2>/dev/null)"
 
-if [ -r "/sys/kernel/debug/ecm/ecm_db/connection_count_simple" ]; then
-    connection_count=$(cat /sys/kernel/debug/ecm/ecm_db/connection_count_simple)
-    echo -n "CPU: ${cpu_usage}% HWE: ${combined_output} ECM: ${connection_count}"
-elif [ -n "$combined_output" ]; then
-    echo -n "CPU: ${cpu_usage}% HWE: ${combined_output}"
-else
-    echo -n "CPU: ${cpu_usage}%"
-fi
+echo -n "${cpu_load} NSS: ${nss_load:-N/A} ECM: ${nss_freq:-N/A} ${nss_ecm:-N/A}"
