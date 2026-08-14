@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-if [ -n "${GITHUB_WORKSPACE:-}" ] && [ -d "$GITHUB_WORKSPACE/wrt/package" ]; then
-	PKG_PATH="$GITHUB_WORKSPACE/wrt/package"
+if [ -n "${GITHUB_WORKSPACE:-}" ] && [ -d "$GITHUB_WORKSPACE/wrt_core/package" ]; then
+	PKG_PATH="$GITHUB_WORKSPACE/wrt_core/package"
 else
 	PKG_PATH="$(pwd)"
 fi
