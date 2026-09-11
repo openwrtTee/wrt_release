@@ -76,11 +76,9 @@ remove_something_nss_kmod() {
         sed -i '/kmod-qca-nss-drv-gre/d' "$ipq_mk_path"
         sed -i '/kmod-qca-nss-drv-map-t/d' "$ipq_mk_path"
         sed -i '/kmod-qca-nss-drv-match/d' "$ipq_mk_path"
-        sed -i '/kmod-qca-nss-drv-mirror/d' "$ipq_mk_path"
         sed -i '/kmod-qca-nss-drv-tun6rd/d' "$ipq_mk_path"
         sed -i '/kmod-qca-nss-drv-tunipip6/d' "$ipq_mk_path"
         sed -i '/kmod-qca-nss-drv-vxlanmgr/d' "$ipq_mk_path"
-        sed -i '/kmod-qca-nss-drv-wifi-meshmgr/d' "$ipq_mk_path"
         sed -i '/kmod-qca-nss-macsec/d' "$ipq_mk_path"
     fi
 }
