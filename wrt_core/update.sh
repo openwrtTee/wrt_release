@@ -78,7 +78,7 @@ stage_pre_install_source_fixes() {
 
     update_default_lan_addr
     # remove_something_nss_kmod
-    update_affinity_script
+    # update_affinity_script
     update_ath11k_fw
     # fix_mkpkg_format_invalid
     change_cpuusage
@@ -88,7 +88,7 @@ stage_pre_install_source_fixes() {
     apply_passwall_tweaks
     update_nss_pbuf_performance
     set_build_signature
-    update_nss_diag
+    # update_nss_diag
     update_menu_location
     fix_compile_coremark
     update_dnsmasq_conf
